@@ -40,8 +40,8 @@ import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	
-	/** Die MainActivity ist für den Nutzer im Prinzip nicht sichtbar. Sie entscheidet nur,
-	 * wohin der Nutzer geleitet werden soll und ist Layout für den NavigationDrawer
+	/** Die MainActivity ist fuer den Nutzer im Prinzip nicht sichtbar. Sie entscheidet nur,
+	 * wohin der Nutzer geleitet werden soll und ist Layout fuer den NavigationDrawer
 	 */
 	
 	private ProgressDialog pDialog;
@@ -94,10 +94,10 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	// Instanziieren des FragmentSwitcher Interfaces
 	FragmentSwitcher fragmentSwitcher;
 	
-	// Internetverbindung ständig überprüfen können
+	// Internetverbindung stÃ¤ndig Ã¼berprÃ¼fuen kÃ¶nnen
 	CheckInternetConnection checkInternetConnection;
 	
-	// Variablen für den NavigationDrawer
+	// Variablen fÃ¼r den NavigationDrawer
 	private DrawerLayout drawer;
 	private ActionBarDrawerToggle toggle;
 	SimpleExpandableListAdapter expListAdapter;
@@ -124,10 +124,10 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	private static int LAYOUT_ICON_TEXT = 2;
 	private static int LAYOUT_TEXT_ONLY = 3;
 	
-	// Menüeinträge
-	ArrayList<DrawerItem> groupItems = new ArrayList<DrawerItem>();	// Array-List für alle Gruppen
-	ArrayList<DrawerItem[]> childItems = new ArrayList<DrawerItem[]>();	// Array-List für alle Gruppenelemente
-	ArrayList<String> expandGroupsChild;	// Array-List für DYNNAMISCHE GRUPPEN
+	// MenÃ¼eintrÃ¤ge
+	ArrayList<DrawerItem> groupItems = new ArrayList<DrawerItem>();	// Array-List fÃ¼r alle Gruppen
+	ArrayList<DrawerItem[]> childItems = new ArrayList<DrawerItem[]>();	// Array-List fï¿½r alle Gruppenelemente
+	ArrayList<String> expandGroupsChild;	// Array-List fï¿½r DYNNAMISCHE GRUPPEN
 	
 	
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -136,7 +136,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		// SessionManager-Object benötigt, um Login-Status abzurufen
+		// SessionManager-Object benÃ¶tigt, um Login-Status abzurufen
 		sessionManager = new SessionManager(getApplicationContext());
 		fragmentSwitcher = (FragmentSwitcher) this;
 		
@@ -159,27 +159,27 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		initializeDrawer();
 		
 		
-		if (sessionManager.isLoggedIn() == false) {					// Login-Status des Nutzers überprüfen.
+		if (sessionManager.isLoggedIn() == false) {					// Login-Status des Nutzers ï¿½berprï¿½fen.
 			Intent intent = new Intent(this, LoginActivity.class); 
 			startActivityForResult(intent, 0);
 			
 		} else {
-			new CountUserGroups().execute();						// Gruppen des Users zählen, um ihn zur entsprechenden Activity weiterzuleiten
+			new CountUserGroups().execute();						// Gruppen des Users zï¿½hlen, um ihn zur entsprechenden Activity weiterzuleiten
 		}
 				
 		
 		// ***************************************************************************************
-		// AB HIER: ClickListener für den NavigationDrawer
+		// AB HIER: ClickListener fï¿½r den NavigationDrawer
 		// ***************************************************************************************
 		
-		// Der OnGroupClickListener sorgt nur dafür, dass die Gruppen nicht einklappbar sind. Sie führen zu keinem Fragment
+		// Der OnGroupClickListener sorgt nur dafï¿½r, dass die Gruppen nicht einklappbar sind. Sie fï¿½hren zu keinem Fragment
 		expListView.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) { 
 				if (getIndividualGroupsOfUser().size() > 0 && groupPosition == 1) {		// Nur Gruppe 1 (Einzelgruppen) kann eingeklappt werden
 					return false;	
 				} else {
-					return true; // Gruppen können nicht eingeklappt werden
+					return true; // Gruppen kï¿½nnen nicht eingeklappt werden
 				}	
 			}
 		});	
@@ -214,13 +214,13 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 					}
 					
 					if (groupPosition == GROUP_POS_ALLGROUPS) {
-							Toast.makeText(MainActivity.this, "Funktion noch nicht verfügbar", Toast.LENGTH_SHORT).show();
+							Toast.makeText(MainActivity.this, "Funktion noch nicht verfï¿½gbar", Toast.LENGTH_SHORT).show();
 					}
 					
 					if (groupPosition == GROUP_POS_ACCOUNT) {
 						switch(childPosition) {
 							case CHILD_POS_CHANGE_ACCOUNT_DATA:
-								Toast.makeText(MainActivity.this, "Funktion noch nicht verfügbar", Toast.LENGTH_SHORT).show();
+								Toast.makeText(MainActivity.this, "Funktion noch nicht verfï¿½gbar", Toast.LENGTH_SHORT).show();
 								break;
 								
 							case CHILD_POS_LOGOUT:							
@@ -260,7 +260,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	}
 	
 	public void initializeDrawer(){
-		// Zuweisungen für den NavigationDrawer
+		// Zuweisungen fï¿½r den NavigationDrawer
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout); // befindet sich innerhalb activity_main.xml		
 		toggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer, R.string.string_navigationdrawer_open, R.string.string_navigationdrawer_close);
 		drawer.setDrawerListener(toggle);
@@ -272,7 +272,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		expListAdapter = new SimpleExpandableListAdapter(this, groupItems, childItems);
 		expListView.setAdapter(expListAdapter);
 		
-		// Gruppen standardmäßig ausklappen
+		// Gruppen standardmï¿½ï¿½ig ausklappen
 		expListView.expandGroup(0);
 		if (getIndividualGroupsOfUser().size() < 1) {
 			expListView.expandGroup(1);	
@@ -283,14 +283,14 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	}
 	
 	// ######### WICHTIG #############
-	// Die Reihenfolge der folgende Methoden-Abschnitte muss zwingend so eingehalten werden. Wenn die Menüpunkte verschoben werden sollen,
+	// Die Reihenfolge der folgende Methoden-Abschnitte muss zwingend so eingehalten werden. Wenn die Menï¿½punkte verschoben werden sollen,
 	// muss das in der setGroupData und der setChildData Methode jeweils synchron passieren. Ansonsten werden die Zuordnungen vertauscht!
 	
 	public void setGroupData() {
 		// Gruppenverwaltung (0)
-		DrawerItem groupSettingsChild = new DrawerItem();													// DrawerItem-Object für Gruppenverwaltung
+		DrawerItem groupSettingsChild = new DrawerItem();													// DrawerItem-Object fï¿½r Gruppenverwaltung
 		groupSettingsChild.setTitle(getString(R.string.string_navigationdrawer_groupsettings));				// Titel
-		groupSettingsChild.setLayoutType(LAYOUT_SECTION_TITLE);												// Section-Layout enthält kein Icon
+		groupSettingsChild.setLayoutType(LAYOUT_SECTION_TITLE);												// Section-Layout enthï¿½lt kein Icon
 		groupSettingsChild.setIcon(R.drawable.ic_navdraw_onegroup);
 		groupItems.add(groupSettingsChild);																	// ab in die Group-ArrayList damit
 		
@@ -298,8 +298,8 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 			// Gruppen aufklappen (1)
 			DrawerItem expandGroupData = new DrawerItem();	
 			expandGroupData.setTitle(getString(R.string.string_navigationdrawer_expandgroups));					// Titel
-			expandGroupData.setLayoutType(LAYOUT_TEXT_ONLY);													// Layout // LAYOUT_TEXT_ONLY enthält kein Icon, daher null bei KEY_ICON
-			expandGroupData.setExtras(R.string.string_navigationdrawer_collapsegroups);							// Extra: zusätzlicher Titel bei ausgeklapptem Menü
+			expandGroupData.setLayoutType(LAYOUT_TEXT_ONLY);													// Layout // LAYOUT_TEXT_ONLY enthï¿½lt kein Icon, daher null bei KEY_ICON
+			expandGroupData.setExtras(R.string.string_navigationdrawer_collapsegroups);							// Extra: zusï¿½tzlicher Titel bei ausgeklapptem Menï¿½
 			groupItems.add(expandGroupData);
 		}
 			
@@ -318,8 +318,8 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 
 	public void setChildGroupData() {
 		// Gruppenverwaltung
-		DrawerItem[] groupSettingsChildren = new DrawerItem[3]; 													// Array für alle Elemente der Gruppenverwaltung		
-		DrawerItem groupSummaryChild = new DrawerItem();										// DrawerItem für Gruppenübersicht-Element		
+		DrawerItem[] groupSettingsChildren = new DrawerItem[3]; 													// Array fï¿½r alle Elemente der Gruppenverwaltung		
+		DrawerItem groupSummaryChild = new DrawerItem();										// DrawerItem fï¿½r Gruppenï¿½bersicht-Element		
 		groupSummaryChild.setTitle(getString(R.string.string_navigationdrawer_groupsummary));	// Titel
 		groupSummaryChild.setIcon(R.drawable.ic_navdraw_allgroups);								// Icon
 		groupSettingsChildren[0] = groupSummaryChild;											// Objekt in Array speichern
@@ -336,13 +336,13 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		
 		childItems.add(groupSettingsChildren);	
 		// -------------------------------------------------------------------------------------------------------------------------------------------
-		// Gruppen ausklappen	- SONDERFALL: für jedes Element wird hier dasselbe Icon verwendet
+		// Gruppen ausklappen	- SONDERFALL: fï¿½r jedes Element wird hier dasselbe Icon verwendet
 		if (getIndividualGroupsOfUser().size() > 0) {
-			DrawerItem[] individualUserGroupChildren = new DrawerItem[getIndividualGroupsOfUser().size()]; // Array-List für alle Usergruppen
+			DrawerItem[] individualUserGroupChildren = new DrawerItem[getIndividualGroupsOfUser().size()]; // Array-List fï¿½r alle Usergruppen
 			Log.d("MainActivity: ", "getIndividualGroupsOfUser().size() = " + getIndividualGroupsOfUser().size());
 			DrawerItem individualUserGroup;
 			for (int i = 0; this.getIndividualGroupsOfUser().size() > i; i++) {
-				individualUserGroup = new DrawerItem();													// DrawerItem-Object für persönliche Gruppe
+				individualUserGroup = new DrawerItem();													// DrawerItem-Object fï¿½r persï¿½nliche Gruppe
 				individualUserGroup.setTitle(this.getIndividualGroupsOfUser().get(i));					// Namen aus Array-Liste lesen
 				individualUserGroup.setIcon(R.drawable.ic_navdraw_onegroup);
 				individualUserGroupChildren[i] = individualUserGroup;
@@ -421,7 +421,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		Log.d("MainActivity:" , "menüitem id: " + id + "R.id: " + R.id.action_settings);
+		Log.d("MainActivity:" , "menï¿½item id: " + id + "R.id: " + R.id.action_settings);
 		if (id == R.id.action_settings) {
 			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);
@@ -506,12 +506,12 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		// TODO Auto-generated method stub
 		super.onResume();
 		
-		Log.d("MainActivity", "onResume() ausgeführt");
+		Log.d("MainActivity", "onResume() ausgefï¿½hrt");
 	}
 	
 	
-	// Überschriebene Methode vom Interface "FragmentSwitcher"
-	// Wird von CreateGroupDialog() und SearchGroupDialog() aufgerufen, um Weiterleitung auf das GroupDetailFragment zu ermöglichen
+	// ï¿½berschriebene Methode vom Interface "FragmentSwitcher"
+	// Wird von CreateGroupDialog() und SearchGroupDialog() aufgerufen, um Weiterleitung auf das GroupDetailFragment zu ermï¿½glichen
 	@Override
 	public void replaceFragment(Bundle fragmentData, Fragment fragment) {
 			

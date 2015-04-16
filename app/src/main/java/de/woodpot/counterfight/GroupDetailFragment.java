@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -24,6 +25,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,10 +51,13 @@ public class GroupDetailFragment extends ListFragment {
 	SessionManager sm;
 	
 	ListAdapter adapter;
+    ListView ls;
 	Context context;
 	
 	Button increaseCounterButton;
 	TextView groupNameTextView;
+    MenuItem editCounter;
+    private String counterType;
 	
 	CheckInternetConnection checkInternet;		
 	
@@ -68,12 +74,15 @@ public class GroupDetailFragment extends ListFragment {
 	private static final String TAG_GROUPNAME = "groupName";
 	private static final String TAG_USERNAME = "userName";
 	private static final String TAG_GROUPID = "groupId";
+    private static final String TAG_SET_COUNTER_TYPE = "counterType";
+    private static final String TAG_COUNTER_TYPE_SET = "set";
+    private static final String TAG_COUNTER_TYPE_INCREASE = "increase";
 
 	//Strings IntentExtra
 	static String groupIdIntent;
 	static String groupNameIntent;
 	
-	// JSONArray für Counterdaten
+	// JSONArray fï¿½r Counterdaten
 	JSONArray counterData = null;
 	private Map<String, String> users = new HashMap<String,String>(); 
 	
@@ -97,7 +106,7 @@ public class GroupDetailFragment extends ListFragment {
 		View layout = inflater.inflate(R.layout.fragment_group_detail, container, false);
 		groupNameTextView = (TextView) layout.findViewById(R.id.group_name);
 		increaseCounterButton = (Button) layout.findViewById(R.id.increase_button);
-		ListView ls = (ListView) layout.findViewById(android.R.id.list);
+		ls = (ListView) layout.findViewById(android.R.id.list);
 		registerForContextMenu(ls);
 		
 		Bundle extras = getArguments();
@@ -118,6 +127,7 @@ public class GroupDetailFragment extends ListFragment {
 			@Override
 			public void onClick(View v) {
 				GroupDetailFragment gdf = new GroupDetailFragment();
+                counterType = TAG_COUNTER_TYPE_INCREASE;
 				new UpdateCounterValue().execute();	
 			}	
 		});
@@ -143,7 +153,7 @@ public class GroupDetailFragment extends ListFragment {
 		protected String doInBackground(String... args) {
 			// Building Parameters	
 			
-				//groupId aus AllGroupsActivity übergeben
+				//groupId aus AllGroupsActivity ï¿½bergeben
 				String username = null;
 				String groupId = null;
 				
@@ -216,12 +226,12 @@ public class GroupDetailFragment extends ListFragment {
 						//adding contact to contact list
 						contactList.add(contact);
 	
-						//background-color hier ändern
+						//background-color hier ï¿½ndern
 						sm = new SessionManager(getActivity().getApplicationContext());
 						if (sm.isLoggedIn() == true) {
 							username = sm.getUsername();
 						}
-					/*	für listview item highlighten
+					/*	fï¿½r listview item highlighten
 						for (int j = 0; j < contactList.size(); j++) {
 						    if(contactList.get(j).equals(username)){
 						       
@@ -248,7 +258,7 @@ public class GroupDetailFragment extends ListFragment {
 					/**
 					 * Updating parsed JSON data into ListView
 					 * */
-					Log.d("GroupDetailActivity JSON: ", "onPostExecute ausgeführt");
+					Log.d("GroupDetailActivity JSON: ", "onPostExecute ausgefï¿½hrt");
 					BaseAdapter adapter = new SimpleAdapter(
 							GroupDetailFragment.this.getActivity(), contactList,
 		                    R.layout.group_detail_list_item, new String[] { TAG_USERNAME, TAG_COUNTERVALUE }, 
@@ -276,7 +286,7 @@ public class GroupDetailFragment extends ListFragment {
 		@Override
 		protected String doInBackground(String... args) {
 		
-			//groupId aus AllGroupsActivity übergeben
+			//groupId aus AllGroupsActivity Ã¼bergeben
 			String username = null;
 			//String groupId = null;
 			
@@ -288,6 +298,7 @@ public class GroupDetailFragment extends ListFragment {
 			final List<NameValuePair> increase_params = new ArrayList<NameValuePair>();	
 			increase_params.add(new BasicNameValuePair(TAG_GROUPID, groupIdIntent));
 			increase_params.add(new BasicNameValuePair(TAG_USERNAME, username));
+            increase_params.add(new BasicNameValuePair(TAG_SET_COUNTER_TYPE, counterType));
 			Log.d("GroupDetailActivity increase_params: ", increase_params.toString());
 			JSONObject json4 = null;
 		
@@ -357,16 +368,65 @@ public class GroupDetailFragment extends ListFragment {
 	
 		}			
 	}
-	
+/*
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.all_groups_context, menu);
+
+        editCounter = menu.findItem(R.id.context_groupDetail_editCounter);
+
+        // AdapterContextMenuInfo besorgt die ListView, auf die Bezug genommen wird und die geklickte Position
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        int position = info.position;
+
+        // ListView-Objekt "ls" wird benÃ¶tigt:
+        @SuppressWarnings("unchecked")
+        HashMap<String,String> map=(HashMap<String, String>) ls.getItemAtPosition(position);
+        groupId = map.get(TAG_USERNAME);
+        admin = map.get(TAG_ADMIN);
+
+        // MenÃ¼eintrag "Gruppe lÃ¶schen" ausblenden, wenn angemeldeter User kein Admin der Gruppe ist
+        if (!(admin.equals(sm.getUsername()))) {
+            deleteGroup.setEnabled(false);
+
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Log.d("AllGroupsFragment", "admin: " + admin + " username: " + sm.getUsername() + " groupId: " + groupId);
+
+
+        switch (item.getItemId()) {
+            case R.id.context_allgroups_leavegroup:
+                new LeaveGroupAsyncTask(context, groupId).execute();
+                refresh();
+                return true;
+
+            case R.id.context_allgroups_deletegroup:
+                new DeleteGroupAsyncTask(context, groupId).execute();
+                refresh();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+*/
+
 	public boolean refresh() {
-		checkInternet = new CheckInternetConnection();	
+		checkInternet = new CheckInternetConnection();
 		if(checkInternet.haveNetworkConnection(context)){
-			Log.d("GroupDetailActivity: ", "hasConnection() true!");	
-			
+			Log.d("GroupDetailActivity: ", "hasConnection() true!");
+
 			new LoadGroupUser().execute();
 			BaseAdapter adapter = new SimpleAdapter(
 				GroupDetailFragment.this.getActivity(), contactList,
-                R.layout.group_detail_list_item, new String[] { TAG_USERNAME, TAG_COUNTERVALUE }, 
+                R.layout.group_detail_list_item, new String[] { TAG_USERNAME, TAG_COUNTERVALUE },
                 new int[] { R.id.user_row_username, R.id.user_countervalue });
 
 			contactList.clear();
@@ -376,12 +436,12 @@ public class GroupDetailFragment extends ListFragment {
 			return true;
 		}
 		else{
-			Log.d("GroupDetailActivity: ", "hasConnection() false!");	
+			Log.d("GroupDetailActivity: ", "hasConnection() false!");
 			showFailConnection();
 			return false;
 		}
 	}
-	
+
 	public void showCountConfirmation(){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 		alertDialogBuilder.setTitle(R.string.string_groupdetailact_alerttitle);

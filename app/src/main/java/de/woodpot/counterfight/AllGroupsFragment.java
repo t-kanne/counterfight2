@@ -195,7 +195,7 @@ public class AllGroupsFragment extends ListFragment  {
 			HashMap<String,String> map=(HashMap<String, String>) ls.getItemAtPosition(position);
             groupId = map.get(TAG_GROUPID);
             admin = map.get(TAG_ADMIN);
-			
+
             // Menüeintrag "Gruppe löschen" ausblenden, wenn angemeldeter User kein Admin der Gruppe ist
 			if (!(admin.equals(sm.getUsername()))) {
 				deleteGroup.setEnabled(false);

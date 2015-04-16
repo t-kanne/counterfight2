@@ -54,8 +54,9 @@
     <string name="string_groupdetailact_fail_alerttext">Du hast momentan leider keine Interverbindung..</string>
     <string name="string_groupdetailact_fail_alertokay">OK</string>
     <string name="string_allact_loading">Lädt...</string>
-    <string name="string_context_leavegroup">Gruppe verlassen</string>
-    <string name="string_context_deletegroup">Gruppe löschen</string>
+    <string name="string_context_leaveGroup">Gruppe verlassen</string>
+    <string name="string_context_deleteGroup">Gruppe löschen</string>
+    <string name="string_context_editCounter">Bearbeiten</string>
     <string name="string_leavegroupasynctask_success">Gruppe erfolgreich verlassen</string>
     <string name="string_leavegroupasynctask_fail">Gruppe konnte nicht verlassen werden</string>
     <string name="string_deletegroupasynctask_success">Gruppe erfolgreich gelöscht</string>

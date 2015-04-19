@@ -47,10 +47,11 @@ public class AllGroupsActivityAdapter extends BaseAdapter {
 	
 	@Override
 	public View getView(int index, View convertView, ViewGroup parent) {
-		Log.d("ÂllGroupsActivityAdapter JSON: ", "wert: " + usersArray[index]);
+		Log.d("ï¿½llGroupsActivityAdapter JSON: ", "wert: " + usersArray[index]);
 		
 		ViewHolder holder;
-		
+
+        
 		if (convertView == null){
 			convertView = inflater.inflate(R.layout.all_groups_list_item, null);
 			

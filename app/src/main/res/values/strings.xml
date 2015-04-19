@@ -28,6 +28,8 @@
     <string name="string_searchgroupdialog_ok">Beitreten</string>
     <string name="string_searchgroupdialog_groupidhint">Gruppen-Id</string>
     <string name="string_searchgroupdialog_wronggroupid">Bitte gib 5 Ziffern ein</string>
+    <string name="string_editCounterDialog_advice">Bitte gib Deinen Counterstand ein: </string>
+    <string name="string_editCounterDialog_counterValueHint">Counterstand</string>
     <string name="string_loginact_advice">Bitte logge dich ein oder registriere dir ein neues Konto</string>
     <string name="string_loginact_login">Login</string>
     <string name="string_loginact_welcome">Counterfight</string>
@@ -61,6 +63,7 @@
     <string name="string_leavegroupasynctask_fail">Gruppe konnte nicht verlassen werden</string>
     <string name="string_deletegroupasynctask_success">Gruppe erfolgreich gelöscht</string>
     <string name="string_deletegroupasynctask_fail">Gruppe konnte nicht gelöscht werden</string>
+    <string name="string_general_ok">OK</string>
 
 
 </resources>

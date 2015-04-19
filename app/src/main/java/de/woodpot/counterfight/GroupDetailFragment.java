@@ -75,12 +75,15 @@ public class GroupDetailFragment extends ListFragment {
 	private static final String TAG_USERNAME = "userName";
 	private static final String TAG_GROUPID = "groupId";
     private static final String TAG_SET_COUNTER_TYPE = "counterType";
-    private static final String TAG_COUNTER_TYPE_SET = "set";
+    private static final String TAG_COUNTER_TYPE_EDIT = "edit";
     private static final String TAG_COUNTER_TYPE_INCREASE = "increase";
 
 	//Strings IntentExtra
 	static String groupIdIntent;
 	static String groupNameIntent;
+
+    private String username;
+    private String counterValue;
 	
 	// JSONArray f�r Counterdaten
 	JSONArray counterData = null;
@@ -128,8 +131,13 @@ public class GroupDetailFragment extends ListFragment {
 			public void onClick(View v) {
 				GroupDetailFragment gdf = new GroupDetailFragment();
                 counterType = TAG_COUNTER_TYPE_INCREASE;
-				new UpdateCounterValue().execute();	
-			}	
+				new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_INCREASE, groupIdIntent, null).execute();
+
+                // Dieser Refresh muss vom UpdateCounterValueAsyncTask ausgelöst werden. Funtkioniert nur noch nicht.
+                if (refresh() == true) {
+                    showCountConfirmation();
+                }
+			}
 		});
 		
 		return layout;
@@ -273,75 +281,7 @@ public class GroupDetailFragment extends ListFragment {
 		}
 			
 	}	
-	
-	
 
-	
-	
-	class UpdateCounterValue extends AsyncTask<String, String, String> {
-		
-		@Override
-		protected void onPreExecute() {}
-			
-		@Override
-		protected String doInBackground(String... args) {
-		
-			//groupId aus AllGroupsActivity übergeben
-			String username = null;
-			//String groupId = null;
-			
-			sm = new SessionManager(context);
-			if (sm.isLoggedIn() == true) {
-				username = sm.getUsername();
-			}	
-			
-			final List<NameValuePair> increase_params = new ArrayList<NameValuePair>();	
-			increase_params.add(new BasicNameValuePair(TAG_GROUPID, groupIdIntent));
-			increase_params.add(new BasicNameValuePair(TAG_USERNAME, username));
-            increase_params.add(new BasicNameValuePair(TAG_SET_COUNTER_TYPE, counterType));
-			Log.d("GroupDetailActivity increase_params: ", increase_params.toString());
-			JSONObject json4 = null;
-		
-			try {
-				json4 = jParser.makeHttpRequest(url_update_counter, "POST", increase_params);
-				Log.d("GroupDetailActivity POST: ", increase_params.toString());
-			} catch (Exception e){
-				Log.e("GroupDetailActivity", "JSON POST: " + e.getMessage());
-			}
-			try {
-				int success = json4.getInt(TAG_SUCCESS);
-
-				if (success == 1) {
-					Log.d("GroupDetailActivityFragment JSON: ", "(get) success 1: update");		
-									
-				}
-				else {
-					Log.d("GroupDetailActivityFragment JSON: ", "(get) success 0: kein update");		
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-			return null;
-		}
-		
-		
-		protected void onPostExecute(String file_url) {
-			
-			// updating UI from Background Thread
-			GroupDetailFragment.this.getActivity().runOnUiThread(new Runnable() {
-				public void run() {
-					/**
-					 * Updating parsed JSON data into ListView
-					 * */
-					if (refresh() == true) {
-						showCountConfirmation();
-					}					
-				}
-			}); 
-		}
-		
-	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -368,14 +308,14 @@ public class GroupDetailFragment extends ListFragment {
 	
 		}			
 	}
-/*
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.all_groups_context, menu);
+        inflater.inflate(R.menu.group_detail_context, menu);
 
         editCounter = menu.findItem(R.id.context_groupDetail_editCounter);
 
@@ -386,37 +326,39 @@ public class GroupDetailFragment extends ListFragment {
         // ListView-Objekt "ls" wird benötigt:
         @SuppressWarnings("unchecked")
         HashMap<String,String> map=(HashMap<String, String>) ls.getItemAtPosition(position);
-        groupId = map.get(TAG_USERNAME);
-        admin = map.get(TAG_ADMIN);
+        username = map.get(TAG_USERNAME);
 
         // Menüeintrag "Gruppe löschen" ausblenden, wenn angemeldeter User kein Admin der Gruppe ist
-        if (!(admin.equals(sm.getUsername()))) {
-            deleteGroup.setEnabled(false);
-
+        if (!(username.equals(sm.getUsername()))) {
+            editCounter.setEnabled(false);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Log.d("AllGroupsFragment", "admin: " + admin + " username: " + sm.getUsername() + " groupId: " + groupId);
+        Log.d("GroupDetailFragment", "edit user: " + username);
 
+        FragmentManager fm = getFragmentManager();
 
         switch (item.getItemId()) {
-            case R.id.context_allgroups_leavegroup:
-                new LeaveGroupAsyncTask(context, groupId).execute();
-                refresh();
+            case R.id.context_groupDetail_editCounter:
+                EditCounterDialog editCounterDialog = (EditCounterDialog) Fragment.instantiate(getActivity(), EditCounterDialog.class.getName(), null);
+                editCounterDialog.setGroupId(groupIdIntent);
+                editCounterDialog.show(fm, "EditCounterDialog");
+
+                // Dieser Refresh muss vom UpdateCounteRValueAsyncTask ausgelöst werden. FUnktioniert aber noch nicht.
+                if (editCounterDialog.isDetached()) {
+                    refresh();
+                }
+
                 return true;
 
-            case R.id.context_allgroups_deletegroup:
-                new DeleteGroupAsyncTask(context, groupId).execute();
-                refresh();
-                return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
-*/
+
 
 	public boolean refresh() {
 		checkInternet = new CheckInternetConnection();
@@ -458,6 +400,7 @@ public class GroupDetailFragment extends ListFragment {
 		alertDialogBuilder.setMessage(R.string.string_groupdetailact_fail_alerttext);
 		alertDialogBuilder.setCancelable(false);
 		alertDialogBuilder.setPositiveButton(R.string.string_groupdetailact_fail_alertokay, null); 
+		alertDialogBuilder.setPositiveButton(R.string.string_groupdetailact_fail_alertokay, null);
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}

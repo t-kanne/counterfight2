@@ -90,7 +90,7 @@ public class AllGroupsFragment extends ListFragment  {
 		private static final String TAG_OWNPLACELAYOUT = "own_place";
 	
 		
-		// JSONArray für Counterdaten
+		// JSONArray fÃ¼r Counterdaten
 		JSONArray counterData = null;
 		private Map<String, String> users = new HashMap<String,String>(); 
 		
@@ -183,20 +183,20 @@ public class AllGroupsFragment extends ListFragment  {
 			MenuInflater inflater = getActivity().getMenuInflater();
 			inflater.inflate(R.menu.all_groups_context, menu);
 			
-			// Objekt vom deleteGroup Menüeintrag erstellen, um es inaktiv stellen zu können
-			deleteGroup = menu.findItem(R.id.context_allgroups_deletegroup);
+			// Objekt vom deleteGroup MenÃ¼eintrag erstellen, um es inaktiv stellen zu kÃ¶nnen
+			deleteGroup = menu.findItem(R.id.context_allGroups_deleteGroup);
 			
 			// AdapterContextMenuInfo besorgt die ListView, auf die Bezug genommen wird und die geklickte Position
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
 	        int position = info.position;
 	        
-			// ListView-Objekt "ls" wird benötigt:	
+			// ListView-Objekt "ls" wird benÃ¶tigt:	
 			@SuppressWarnings("unchecked")
 			HashMap<String,String> map=(HashMap<String, String>) ls.getItemAtPosition(position);
             groupId = map.get(TAG_GROUPID);
             admin = map.get(TAG_ADMIN);
 
-            // Menüeintrag "Gruppe löschen" ausblenden, wenn angemeldeter User kein Admin der Gruppe ist
+            // MenÃ¼eintrag "Gruppe lÃ¶schen" ausblenden, wenn angemeldeter User kein Admin der Gruppe ist
 			if (!(admin.equals(sm.getUsername()))) {
 				deleteGroup.setEnabled(false);
 
@@ -210,12 +210,12 @@ public class AllGroupsFragment extends ListFragment  {
 			
 	    
 		    switch (item.getItemId()) {
-		        case R.id.context_allgroups_leavegroup:
+		        case R.id.context_allGroups_leaveGroup:
 		            new LeaveGroupAsyncTask(context, groupId).execute();
 		            refresh();  
 		            return true;
 		        
-		        case R.id.context_allgroups_deletegroup:
+		        case R.id.context_allGroups_deleteGroup:
 		            new DeleteGroupAsyncTask(context, groupId).execute();
 		            refresh();
 		            return true;
@@ -313,7 +313,7 @@ public class AllGroupsFragment extends ListFragment  {
 						for (int i = 0; i < counterData.length(); i++) {
 							JSONObject c = counterData.getJSONObject(i);
 							
-							//Parameter für Übergabe an GroupDetailActivity
+							//Parameter fÃ¼r Ãœbergabe an GroupDetailActivity
 							groupId = c.getString(TAG_GROUPID);
 							groupName = c.getString(TAG_GROUPNAME);
 							admin = c.getString(TAG_ADMIN);
@@ -394,10 +394,6 @@ public class AllGroupsFragment extends ListFragment  {
             
             Log.d("GroupDetailActivity:", "groupId: " + groupId);
             Log.d("GroupDetailActivity:", "groupName: " + groupName);
-            
-            //Intent intent = new Intent(context, GroupDetailActivity.class);
-		    //intent.putExtra("groupId", groupId);
-		    //intent.putExtra("groupName", groupName);
             		
 			Bundle fragmentData = new Bundle();
 			fragmentData.putString("groupId", groupId);
@@ -448,7 +444,7 @@ public class AllGroupsFragment extends ListFragment  {
 		public void onResume() {
 			// TODO Auto-generated method stub
 			super.onResume();
-			Log.d("AllGroupsFragment", "onResume() ausgeführt");
+			Log.d("AllGroupsFragment", "onResume() ausgefÃ¼hrt");
 		}
 		
 		

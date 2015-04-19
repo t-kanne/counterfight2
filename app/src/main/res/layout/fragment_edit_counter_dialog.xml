@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".CreateGroupDialog" >
+
+    <TextView
+        android:id="@+id/textView_editCounterDialog_advice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
+        android:layout_marginBottom="5sp"
+        android:text="@string/string_editCounterDialog_advice" />
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/editText_editCounterDialog_counterValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/string_editCounterDialog_counterValueHint"
+            android:inputType="number" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/button_editCounterDialog_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/string_general_ok" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/context_groupDetail_editCounter"
-          android:title="@string/string_context_editCounter"
-          android:showAsAction="ifRoom"/>
+    <item android:id="@+id/context_allGroups_leaveGroup"
+        android:title="@string/string_context_leaveGroup"
+        android:showAsAction="ifRoom"/>
+    <item android:id="@+id/context_allGroups_deleteGroup"
+        android:title="@string/string_context_deleteGroup"
+        android:showAsAction="ifRoom"/>
 </menu>

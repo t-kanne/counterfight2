@@ -53,7 +53,7 @@ public class EditCounterDialog extends DialogFragment {
 
                 if (editTextLength > 0) {
                     new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_EDIT, groupId,
-                            counterValueEditText.getText().toString()).execute();
+                            counterValueEditText.getText().toString(), fragmentSwitcher).execute();
                     Log.d("CreateGroupDialog:", "Edit Counter Value: " + counterValueEditText.getText().toString());
                     dismiss();
 
@@ -80,5 +80,6 @@ public class EditCounterDialog extends DialogFragment {
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
+
 
 }

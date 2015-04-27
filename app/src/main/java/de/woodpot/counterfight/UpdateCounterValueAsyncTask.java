@@ -3,6 +3,8 @@ package de.woodpot.counterfight;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import org.apache.http.NameValuePair;
@@ -32,14 +34,15 @@ public class UpdateCounterValueAsyncTask extends AsyncTask<String, String, Strin
     private static final String TAG_GROUPID = "groupId";
     private static final String TAG_SUCCESS = "success";
 
-    SessionManager sm;
+    private SessionManager sm;
+    private FragmentSwitcher fragmentSwitcher;
     JSONParser jParser = new JSONParser();
 
     // Url-Strings
     private static String url_update_counter = "http://www.counterfight.net/update_counter_value.php";
 
     public UpdateCounterValueAsyncTask(Context context, String counterType, String groupIdIntent,
-                                       String counterValue) {
+                                       String counterValue, FragmentSwitcher fragmentSwitcher) {
         this.context = context;
         this.counterType = counterType;
         this.groupIdIntent = groupIdIntent;
@@ -47,6 +50,7 @@ public class UpdateCounterValueAsyncTask extends AsyncTask<String, String, Strin
 
         Log.d("UpdateCounterValueAsyncTask", "Counter-Type: " + counterType);
         sm = new SessionManager(this.context.getApplicationContext());
+        this.fragmentSwitcher = fragmentSwitcher;
         pDialog = new ProgressDialog(this.context);
     };
 
@@ -116,14 +120,14 @@ public class UpdateCounterValueAsyncTask extends AsyncTask<String, String, Strin
 
     protected void onPostExecute(String file_url) {
 
-//        //updating UI from Background Thread
-//        GroupDetailFragment.getActivity().runOnUiThread(new Runnable() {
-//            public void run() {
-//                if (refresh() == true) {
-//                    showCountConfirmation();
-//                }
-//            }
-//        });
+//        Bundle fragmentData = new Bundle();
+//        //groupId = String.format("%05d", groupId);
+//
+//        fragmentData.putString("groupId", groupIdIntent);
+//        fragmentData.putString("groupName", "jap");
+
+        GroupDetailFragment fragment = new GroupDetailFragment();
+        fragmentSwitcher.refreshFragment(fragment);
     }
 
 

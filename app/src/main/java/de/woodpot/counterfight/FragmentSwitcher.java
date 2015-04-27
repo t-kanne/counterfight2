@@ -9,5 +9,7 @@ public interface FragmentSwitcher {
 	
 	public void startGroupDependingActivity(String noOfGroups);
 
+    public void refreshFragment(Fragment fragment);
+
 
 }

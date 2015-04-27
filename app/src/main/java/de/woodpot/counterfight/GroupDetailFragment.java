@@ -49,6 +49,7 @@ public class GroupDetailFragment extends ListFragment {
 	// JSONParser Objekt erstellen
 	JSONParser jParser = new JSONParser();
 	SessionManager sm;
+    private FragmentSwitcher fragmentSwitcher;
 	
 	ListAdapter adapter;
     ListView ls;
@@ -131,7 +132,7 @@ public class GroupDetailFragment extends ListFragment {
 			public void onClick(View v) {
 				GroupDetailFragment gdf = new GroupDetailFragment();
                 counterType = TAG_COUNTER_TYPE_INCREASE;
-				new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_INCREASE, groupIdIntent, null).execute();
+				new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_INCREASE, groupIdIntent, null, fragmentSwitcher).execute();
 
                 // Dieser Refresh muss vom UpdateCounterValueAsyncTask ausgelöst werden. Funtkioniert nur noch nicht.
                 if (refresh() == true) {
@@ -142,10 +143,15 @@ public class GroupDetailFragment extends ListFragment {
 		
 		return layout;
 	}
-	
-	
 
-	class LoadGroupUser extends AsyncTask<String, String, String> {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        fragmentSwitcher = (FragmentSwitcher) getActivity();
+    }
+
+    class LoadGroupUser extends AsyncTask<String, String, String> {
 	
 		@Override
 		protected void onPreExecute() {
@@ -403,8 +409,7 @@ public class GroupDetailFragment extends ListFragment {
 		alertDialogBuilder.setPositiveButton(R.string.string_groupdetailact_fail_alertokay, null);
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
-	}
-	
-	
-	
+    }
+
+
 }

@@ -567,4 +567,20 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		
 	}
 
+    @Override
+    public void refreshFragment(Fragment fragment) {
+//        Bundle newFragmentData = new Bundle();
+//        newFragmentData.putString("groupId", fragmentData.getString("groupId"));
+//        newFragmentData.putString("groupName", fragmentData.getString("groupName") + " (Id: " + fragmentData.getString("groupId") + ")");
+//        Log.d("MainActivity respond: ", "FragmentName: " + fragmentData.getString("fragmentName"));
+//        fragment.setArguments(newFragmentData);
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+        fragmentTransaction.detach(fragment);
+        fragmentTransaction.attach(fragment).commit();
+        Log.d("LoginActivity", "RESPOND groupId: " + groupIdIntent +groupNameIntent);
+    }
+
 }

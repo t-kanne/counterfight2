@@ -62,17 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				startActivity(intent);
 				return true;
 			}
-    	});
-    	
-    	loginActPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				
-				Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-				startActivity(intent);
-				return true;
-			}
-    	});
+        });
  
     }
 	
@@ -80,7 +70,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		sm = new SessionManager(this);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		
-		// Edittext für die Sicherheits-Passwortabfrage
+		// Edittext fï¿½r die Sicherheits-Passwortabfrage
 		final EditText pw = new EditText(this);
 		pw.setTransformationMethod(PasswordTransformationMethod.getInstance());
 		pw.setHint(R.string.string_loginact_passwordhint);
@@ -131,7 +121,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	        }
 	        
 	        String lockKey = "pref_lockscreen_mode_key";
-	        Log.i("settings", "lockscreen mode geändert");
+	        Log.i("settings", "lockscreen mode geï¿½ndert");
 	        CheckBoxPreference lockPref = (CheckBoxPreference) findPreference(lockKey);
 	        boolean lockPrefValue = lockPref.isChecked();
 	        Log.i("settings", "lockscreenOn: " + lockPrefValue);

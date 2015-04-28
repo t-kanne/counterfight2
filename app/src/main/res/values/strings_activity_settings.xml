@@ -11,11 +11,7 @@
     <string name="pref_account_warning_explanation">Um deinen Account zu löschen, gib bitte zur Sicherheit dein Passwort ein. (Achtung, der Account kann nicht wiederhergestellt werden!)</string>
     <string name="pref_account_warning_positive_button">Account löschen </string>
     <string name="pref_account_warning_negative_button">Abbrechen</string>
-    
 
-
-    
-    
     <!--  ListView Einträge für den Navigation Drawer -->
     <string-array name="stringarray_navigationdrawer_othersettings" >
         <item>Einstellungen</item>

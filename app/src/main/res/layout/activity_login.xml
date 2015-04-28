@@ -33,6 +33,7 @@
         android:inputType="text"
         android:hint="@string/string_loginact_usernamehint"
         android:ems="10" />
+    <requestFocus />
     
     <EditText
         android:id="@+id/edittext_loginact_password"
@@ -45,7 +46,6 @@
         android:ems="10"
         android:inputType="textPassword" >
 
-        <requestFocus />
     </EditText>
 
     <Button

@@ -24,8 +24,10 @@
         android:layout_below="@+id/textview_registeract_advice"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
+        android:inputType="text"
         android:hint="@string/string_loginact_usernamehint"
-        android:ems="10" >
+        android:gravity="center"
+        android:ems="12" >
 
         <requestFocus />
     </EditText>
@@ -37,8 +39,10 @@
         android:layout_below="@+id/edittext_registeract_username"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
+        android:inputType="text"
         android:hint="@string/string_registeract_realnamehint"
-        android:ems="10" />
+        android:gravity="center"
+        android:ems="12" />
 
     <EditText
         android:id="@+id/edittext_registeract_password1"
@@ -47,7 +51,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:hint="@string/string_loginact_passwordhint"
-        android:ems="10"
+        android:gravity="center"
+        android:ems="12"
         android:inputType="textPassword" />
 
     <EditText
@@ -58,7 +63,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp"
         android:hint="@string/string_registeract_repeatpasswordhint"
-        android:ems="10"
+        android:gravity="center"
+        android:ems="12"
         android:inputType="textPassword" />
 
     <Button

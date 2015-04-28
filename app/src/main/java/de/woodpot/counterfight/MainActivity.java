@@ -80,7 +80,6 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	Context context;
 	
 	// Fragmente
-	private RegisterFragment registerFragment;
 	private AllGroupsFragment allGroupsFragment;
 	private GroupDetailFragment groupDetailFragment;
 	private InfoFragment infoFragment;
@@ -141,7 +140,6 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		fragmentSwitcher = (FragmentSwitcher) this;
 		
 		// Fragmente instanziieren
-		registerFragment = (RegisterFragment) Fragment.instantiate(this, RegisterFragment.class.getName(), null);
 		allGroupsFragment = (AllGroupsFragment) Fragment.instantiate(this, AllGroupsFragment.class.getName(), null);
 		groupDetailFragment = (GroupDetailFragment) Fragment.instantiate(this, GroupDetailFragment.class.getName(), null);
 		infoFragment = (InfoFragment) Fragment.instantiate(this, InfoFragment.class.getName(), null);

@@ -38,6 +38,7 @@ public class RegisterActivity extends ActionBarActivity {
 	
 	// JSONParser Objekt erstellen
 	JSONParser jParser = new JSONParser();
+    SessionManager sessionManager;
 	
 	// Server-Urls
 	private static String url_create_user = "http://www.counterfight.net/create_user.php";
@@ -53,7 +54,7 @@ public class RegisterActivity extends ActionBarActivity {
 	// MYSQL Fehlercodes
 	private static final String MYSQL_ERRORCODE_USER_ALREADY_EXISTS = "1062";
 	
-	// JSONArray für Counterdaten
+	// JSONArray fï¿½r Counterdaten
 	JSONArray userTable = null;
 	
 
@@ -62,6 +63,7 @@ public class RegisterActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
+        sessionManager = new SessionManager(getApplicationContext());
 		
 		usernameEditText = (EditText)findViewById(R.id.edittext_registeract_username);
 		realnameEditText = (EditText)findViewById(R.id.edittext_registeract_realname);
@@ -135,8 +137,8 @@ public class RegisterActivity extends ActionBarActivity {
 							  Toast.makeText(RegisterActivity.this, "Username " + usernameString + " erstellt", Toast.LENGTH_SHORT).show();
 						  }
 					});
-					Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-					startActivity(intent);
+					sessionManager.createSession(usernameString, passwordString);
+                    goBackToMainActivity();
 				}
 				else {
 					if (json.getString(TAG_ERRORCODE).equals(MYSQL_ERRORCODE_USER_ALREADY_EXISTS)){
@@ -159,6 +161,12 @@ public class RegisterActivity extends ActionBarActivity {
 		}
 		
 	}
+
+    public void goBackToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

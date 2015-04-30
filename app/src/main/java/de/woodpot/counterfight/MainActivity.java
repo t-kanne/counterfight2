@@ -18,6 +18,7 @@ import android.media.audiofx.BassBoost.Settings;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.DialogFragment;
@@ -440,7 +441,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 			super.onBackPressed();
 		} else {
 			getSupportFragmentManager().popBackStack();
-		}
+		}    
 	}
 	
 
@@ -522,7 +523,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction fragmentTransaction = fm.beginTransaction();
 		
-		fragmentTransaction.replace(R.id.main_activity_content, fragment, fragment.toString());
+		fragmentTransaction.replace(R.id.main_activity_content, fragment, fragment.toString()).addToBackStack(fragment.toString());
 		fragmentTransaction.commit(); 
 		Log.d("LoginActivity", "RESPOND groupId: " + groupIdIntent +groupNameIntent);
 		

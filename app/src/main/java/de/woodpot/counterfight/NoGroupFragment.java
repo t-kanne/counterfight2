@@ -29,7 +29,7 @@ public class NoGroupFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
+
 	}
 	
 	@Override
@@ -41,13 +41,14 @@ public class NoGroupFragment extends Fragment {
 		searchGroupButton = (Button)layout.findViewById(R.id.button_nogroupact_searchGroup);
 		
 		fm = getFragmentManager();
+        fm.popBackStack("GroupDetailsFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		
 		createGroupButton.setOnClickListener(new OnClickListener(){
 			
 			@Override
 			public void onClick(View arg0) {		
 				CreateGroupDialog createGroupDialog = (CreateGroupDialog) Fragment.instantiate(getActivity(), CreateGroupDialog.class.getName(), null);
-				createGroupDialog.show(fm, "CreateGroupDialog");			
+				createGroupDialog.show(fm, "CreateGroupDialog");
 			}
 			
 		});

@@ -107,11 +107,7 @@ public class AllGroupsFragment extends ListFragment  {
 			setHasOptionsMenu(true);
 			
 			contactList = new ArrayList<HashMap<String, String>>();
-			
-			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-			fragmentTransaction.addToBackStack("tag_allgroups_fragment");
-			fragmentTransaction.commit();
-			
+
 			new LoadAllUserCounter().execute();
 		}
 		
@@ -356,24 +352,29 @@ public class AllGroupsFragment extends ListFragment  {
 			protected void onPostExecute(String file_url) {
 				
 				// updating UI from Background Thread
-				AllGroupsFragment.this.getActivity().runOnUiThread(new Runnable() {
-					public void run() {
-						/**
-						 * Updating parsed JSON data into ListView
-						 * */
-						BaseAdapter adapter = new SimpleAdapter(
-								AllGroupsFragment.this.getActivity(), contactList,
-								R.layout.all_groups_list_item, new String[] { TAG_GROUPNAME, TAG_USERFIRST,
-										TAG_OWNPLACE }, new int[] { R.id.user_row_groupName,
-										R.id.user_row_first_place, R.id.user_row_own_place });
-						// updating listview
-						//Log.d("AllGroupsActivityFragment JSON: ", "Adapterusers: " + users.toString());
-						setListAdapter (adapter);
-						
-						pDialog.dismiss();
-					}
-				}); 
-			}
+                try {
+                    AllGroupsFragment.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            /**
+                             * Updating parsed JSON data into ListView
+                             * */
+                            BaseAdapter adapter = new SimpleAdapter(
+                                    AllGroupsFragment.this.getActivity(), contactList,
+                                    R.layout.all_groups_list_item, new String[] { TAG_GROUPNAME, TAG_USERFIRST,
+                                            TAG_OWNPLACE }, new int[] { R.id.user_row_groupName,
+                                            R.id.user_row_first_place, R.id.user_row_own_place });
+                            // updating listview
+                            //Log.d("AllGroupsActivityFragment JSON: ", "Adapterusers: " + users.toString());
+                            setListAdapter (adapter);
+                        }
+                    });
+                } catch (NullPointerException e) {
+                    Log.d("AllGroupsFragment", "No UI Thread found.");
+                }
+                finally {
+                    pDialog.dismiss();
+                }
+            }
 		}
 		
 		
@@ -395,12 +396,7 @@ public class AllGroupsFragment extends ListFragment  {
             Log.d("GroupDetailActivity:", "groupId: " + groupId);
             Log.d("GroupDetailActivity:", "groupName: " + groupName);
             		
-			Bundle fragmentData = new Bundle();
-			fragmentData.putString("groupId", groupId);
-			fragmentData.putString("groupName", groupName);
-			groupDetailFragment.setArguments(fragmentData);
-			fragmentTransaction.replace(R.id.main_activity_content, groupDetailFragment).addToBackStack("GroupDetailsFragment");
-			fragmentTransaction.commit();    
+			goToNextFragment();
 		}
 		
 		public boolean refresh() {
@@ -446,6 +442,15 @@ public class AllGroupsFragment extends ListFragment  {
 			super.onResume();
 			Log.d("AllGroupsFragment", "onResume() ausgeführt");
 		}
+
+        public void goToNextFragment() {
+            Bundle fragmentData = new Bundle();
+            fragmentData.putString("groupId", groupId);
+            fragmentData.putString("groupName", groupName);
+
+            GroupDetailFragment fragment = new GroupDetailFragment();
+            fragmentSwitcher.replaceFragment(fragmentData, fragment);
+        }
 		
 		
 		    

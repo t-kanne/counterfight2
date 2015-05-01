@@ -60,7 +60,7 @@ public class SearchGroupDialog extends DialogFragment {
 	private static final String MYSQL_ERRORCODE_GROUP_DOES_NOT_EXIST = "0";
 	
 	
-	// JSONArray für Counterdaten
+	// JSONArray fï¿½r Counterdaten
 	JSONArray groupTable = null;
 	String groupName = null;
 	
@@ -196,6 +196,6 @@ public class SearchGroupDialog extends DialogFragment {
 		fragmentData.putString("groupName", groupName);
 		
 		GroupDetailFragment fragment = new GroupDetailFragment();
-		fragmentSwitcher.replaceFragment(fragmentData, fragment); 
+		fragmentSwitcher.replaceFragment(fragmentData, fragment);
 	}
 }

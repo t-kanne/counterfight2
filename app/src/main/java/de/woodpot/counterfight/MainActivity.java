@@ -90,8 +90,9 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 	private NoGroupFragment noGroupFragment;
 	
 	FragmentTransaction fragmentTransaction;
-	
-	// Instanziieren des FragmentSwitcher Interfaces
+    FragmentManager fm;
+
+    // Instanziieren des FragmentSwitcher Interfaces
 	FragmentSwitcher fragmentSwitcher;
 	
 	// Internetverbindung ständig überprüfuen können
@@ -139,6 +140,8 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		// SessionManager-Object benötigt, um Login-Status abzurufen
 		sessionManager = new SessionManager(getApplicationContext());
 		fragmentSwitcher = (FragmentSwitcher) this;
+        fm = getSupportFragmentManager();
+        
 		
 		// Fragmente instanziieren
 		allGroupsFragment = (AllGroupsFragment) Fragment.instantiate(this, AllGroupsFragment.class.getName(), null);
@@ -160,6 +163,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		
 		if (sessionManager.isLoggedIn() == false) {					// Login-Status des Nutzers �berpr�fen.
 			Intent intent = new Intent(this, LoginActivity.class); 
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivityForResult(intent, 0);
 			
 		} else {
@@ -228,6 +232,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 								}
 								Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 								intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                fm.popBackStack();
 								startActivity(intent);
 						}
 					}
@@ -434,16 +439,35 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
+/*	@Override
 	public void onBackPressed() {
-		int fragCount = getSupportFragmentManager().getBackStackEntryCount();
-		if (fragCount == 0) {
+		int fragCount = fm.getBackStackEntryCount();
+        String fragTag = "0";
+        Log.d("onBackPressed", "fragCount: " + fragCount);
+        
+        try {
+            fragTag = fm.getBackStackEntryAt(fragCount-1).getName();
+            Log.d("onBackPressed", "fragTag: " + fragTag);
+            
+            if (fragTag.equals("NoGroupFragment")) {
+                super.onBackPressed();
+            }
+            
+        } catch (NullPointerException | IndexOutOfBoundsException e ) {
+            Log.e("onBackPressed", fragTag + " is not the right fragment");
+        }
+        
+        if (fragCount == 0) {
 			super.onBackPressed();
-		} else {
-			getSupportFragmentManager().popBackStack();
+		} 
+        else {
+            fm.popBackStack();
 		}    
+        
+        
+        drawer.closeDrawers();
 	}
-	
+	*/
 
 	class CountUserGroups extends AsyncTask <String, String, String> {
 		
@@ -519,10 +543,18 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		newFragmentData.putString("groupName", fragmentData.getString("groupName") + " (Id: " + fragmentData.getString("groupId") + ")");
 		Log.d("MainActivity respond: ", "FragmentName: " + fragmentData.getString("fragmentName"));
 		fragment.setArguments(newFragmentData);
-		
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction fragmentTransaction = fm.beginTransaction();
-		
+        fragmentTransaction = fm.beginTransaction();
+	    
+        try {
+            String fragTag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName();
+            if (fragTag.equals("AllGroupsFragment")) {
+                Log.d("replaceFragment", "AllGroupsFragment !!");
+            } else {
+                Log.d("replaceFragment", "FragTag: " + fragTag);
+            }
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            
+        }
 		fragmentTransaction.replace(R.id.main_activity_content, fragment, fragment.toString()).addToBackStack(fragment.toString());
 		fragmentTransaction.commit(); 
 		Log.d("LoginActivity", "RESPOND groupId: " + groupIdIntent +groupNameIntent);
@@ -536,28 +568,36 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 		try {
 			noOfGroupsInt = Integer.valueOf(noOfGroups);
 			Log.d("LoginActivity: ", "Anzahl Gruppen: " + noOfGroupsInt);
-			FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+			fragmentTransaction = getSupportFragmentManager().beginTransaction();
 			
 			if (noOfGroupsInt == 0) {
 				fragmentTransaction.replace(R.id.main_activity_content, noGroupFragment);
-				fragmentTransaction.commit();
+                
+                try {
+                    for (int i = 0; i <= fm.getBackStackEntryCount(); i++) {
+                        fm.popBackStack();
+                    }
+                } catch (NullPointerException e) {
+                    Log.d("MainActivity: ", "PopBackStack not possible");
+                }
+                finally {
+                    fragmentTransaction.commit();
+                }   
 			}
 			
 			if (noOfGroupsInt == 1) {
 				Bundle fragmentData = new Bundle();
 				fragmentData.putString("groupId", groupIdIntent);
 				fragmentData.putString("groupName", groupNameIntent + " (Id: " + groupIdIntent + ")");
-				groupDetailFragment.setArguments(fragmentData);
-				fragmentTransaction.replace(R.id.main_activity_content, groupDetailFragment);
-				fragmentTransaction.commit(); 
+                replaceFragment(fragmentData, groupDetailFragment);
 				Log.d("LoginActivity", "groupId: " + groupIdIntent +groupNameIntent);
 				
 			}
 			if (noOfGroupsInt > 1) {
 				fragmentTransaction.replace(R.id.main_activity_content,	allGroupsFragment);
 				fragmentTransaction.commit();
-				drawer.closeDrawers();
 			}
+            
 		} catch (NumberFormatException e) {
 			//Intent intent = new Intent(this, NoGroupActivity.class);
 			//startActivity(intent);
@@ -573,8 +613,7 @@ public class MainActivity extends FragmentActivity implements FragmentSwitcher {
 //        newFragmentData.putString("groupName", fragmentData.getString("groupName") + " (Id: " + fragmentData.getString("groupId") + ")");
 //        Log.d("MainActivity respond: ", "FragmentName: " + fragmentData.getString("fragmentName"));
 //        fragment.setArguments(newFragmentData);
-
-        FragmentManager fm = getSupportFragmentManager();
+        
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
         fragmentTransaction.detach(fragment);

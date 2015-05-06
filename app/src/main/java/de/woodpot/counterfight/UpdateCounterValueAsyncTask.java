@@ -18,6 +18,9 @@ import java.util.List;
 /**
  * Created by Thomas on 17.04.2015.
  */
+
+
+
 public class UpdateCounterValueAsyncTask extends AsyncTask<String, String, String> {
     private Context context;
     private ProgressDialog pDialog;
@@ -36,10 +39,19 @@ public class UpdateCounterValueAsyncTask extends AsyncTask<String, String, Strin
 
     private SessionManager sm;
     private FragmentSwitcher fragmentSwitcher;
+    OnAsyncTaskFinishedListener onAsyncTaskFinishedListener;
     JSONParser jParser = new JSONParser();
 
     // Url-Strings
     private static String url_update_counter = "http://www.counterfight.net/update_counter_value.php";
+
+    public interface OnAsyncTaskFinishedListener {
+        public void doWhenFinished(boolean isFinished);
+    }
+
+    public void setOnAsyncTaskFinishedListener(OnAsyncTaskFinishedListener onAsyncTaskFinishedListener) {
+        this.onAsyncTaskFinishedListener = onAsyncTaskFinishedListener;
+    }
 
     public UpdateCounterValueAsyncTask(Context context, String counterType, String groupIdIntent,
                                        String counterValue, FragmentSwitcher fragmentSwitcher) {
@@ -119,15 +131,7 @@ public class UpdateCounterValueAsyncTask extends AsyncTask<String, String, Strin
 
 
     protected void onPostExecute(String file_url) {
-
-//        Bundle fragmentData = new Bundle();
-//        //groupId = String.format("%05d", groupId);
-//
-//        fragmentData.putString("groupId", groupIdIntent);
-//        fragmentData.putString("groupName", "jap");
-
-        GroupDetailFragment fragment = new GroupDetailFragment();
-        fragmentSwitcher.refreshFragment(fragment);
+        onAsyncTaskFinishedListener.doWhenFinished(true);
     }
 
 

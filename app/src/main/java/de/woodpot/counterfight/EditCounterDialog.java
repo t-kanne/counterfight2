@@ -24,10 +24,19 @@ public class EditCounterDialog extends DialogFragment {
     SessionManager sm;
     Context context;
     FragmentSwitcher fragmentSwitcher;
+    OnDialogFinishedListener onDialogFinishedListener;
     private String groupId;
 
     // Tag-Strings
     private static String TAG_COUNTER_TYPE_EDIT = "edit";
+
+    public interface OnDialogFinishedListener {
+        public void doWhenFinished(boolean isFinished);
+    }
+
+    public void setOnDialogFinishedListener(OnDialogFinishedListener onDialogFinishedListener) {
+        this.onDialogFinishedListener = onDialogFinishedListener;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +61,24 @@ public class EditCounterDialog extends DialogFragment {
                 int editTextLength = counterValueEditText.getText().toString().length();
 
                 if (editTextLength > 0) {
-                    new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_EDIT, groupId,
-                            counterValueEditText.getText().toString(), fragmentSwitcher).execute();
-                    Log.d("CreateGroupDialog:", "Edit Counter Value: " + counterValueEditText.getText().toString());
-                    dismiss();
+                    UpdateCounterValueAsyncTask updateCounterValueAsyncTask = new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_EDIT, groupId,
+                            counterValueEditText.getText().toString(), fragmentSwitcher);
+                    updateCounterValueAsyncTask.execute();
+                    updateCounterValueAsyncTask.setOnAsyncTaskFinishedListener(new UpdateCounterValueAsyncTask.OnAsyncTaskFinishedListener() {
+                        @Override
+                        public void doWhenFinished(boolean isFinished) {
+                            if (isFinished == true) {
+                                Log.d("EditCounterDialog:", "Edit Counter Value: " + counterValueEditText.getText().toString());
+                                onDialogFinishedListener.doWhenFinished(true);
+                                dismiss();
+                            } else {
+                                Log.d("EditCounterDialog: ", "Fehler beim Editieren des Counters");
+                            }
+                        }
+                    });
+
+
+
 
                 }
                 else {

@@ -44,7 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class GroupDetailFragment extends ListFragment {
+public class GroupDetailFragment extends ListFragment   {
 
 	// JSONParser Objekt erstellen
 	JSONParser jParser = new JSONParser();
@@ -85,6 +85,7 @@ public class GroupDetailFragment extends ListFragment {
 
     private String username;
     private String counterValue;
+    private String editCounterValue;
 	
 	// JSONArray f�r Counterdaten
 	JSONArray counterData = null;
@@ -352,9 +353,18 @@ public class GroupDetailFragment extends ListFragment {
                 EditCounterDialog editCounterDialog = (EditCounterDialog) Fragment.instantiate(getActivity(), EditCounterDialog.class.getName(), null);
                 editCounterDialog.setGroupId(groupIdIntent);
                 editCounterDialog.show(fm, "EditCounterDialog");
+                editCounterDialog.setOnDialogFinishedListener(new EditCounterDialog.OnDialogFinishedListener(){
+                    @Override
+                    public void doWhenFinished(boolean isFinished) {
+                        if (isFinished == true) {
+                            refresh();
+                        }
+                    }
+                });
 
                 // Dieser Refresh muss vom UpdateCounteRValueAsyncTask ausgelöst werden. FUnktioniert aber noch nicht.
                 if (editCounterDialog.isDetached()) {
+                    Log.d("GroupDetailFragment", "editCounterValue: " + getEditCounterValue());
                     refresh();
                 }
 
@@ -365,6 +375,13 @@ public class GroupDetailFragment extends ListFragment {
         }
     }
 
+    public String getEditCounterValue() {
+        return editCounterValue;
+    }
+
+    public void setEditCounterValue(String value) {
+        this.editCounterValue = value;
+    }
 
 	public boolean refresh() {
 		checkInternet = new CheckInternetConnection();

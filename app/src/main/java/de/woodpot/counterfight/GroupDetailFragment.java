@@ -131,14 +131,24 @@ public class GroupDetailFragment extends ListFragment   {
 		increaseCounterButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				GroupDetailFragment gdf = new GroupDetailFragment();
+				//GroupDetailFragment gdf = new GroupDetailFragment();
                 counterType = TAG_COUNTER_TYPE_INCREASE;
-				new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_INCREASE, groupIdIntent, null, fragmentSwitcher).execute();
-
-                // Dieser Refresh muss vom UpdateCounterValueAsyncTask ausgelöst werden. Funtkioniert nur noch nicht.
-                if (refresh() == true) {
-                    showCountConfirmation();
-                }
+				UpdateCounterValueAsyncTask updateCounterValueAsyncTask =
+                        new UpdateCounterValueAsyncTask(context, TAG_COUNTER_TYPE_INCREASE, groupIdIntent, null, fragmentSwitcher);
+                updateCounterValueAsyncTask.execute();
+                updateCounterValueAsyncTask.setOnAsyncTaskFinishedListener(
+                        new UpdateCounterValueAsyncTask.OnAsyncTaskFinishedListener() {
+                            @Override
+                            public void doWhenFinished(boolean isFinished) {
+                                if (isFinished == true) {
+                                    refresh();
+                                    showCountConfirmation();
+                                } else {
+                                    showFailConnection();
+                                }
+                            }
+                        }
+                );
 			}
 		});
 		

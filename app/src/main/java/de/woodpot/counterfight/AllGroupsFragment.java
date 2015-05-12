@@ -324,7 +324,8 @@ public class AllGroupsFragment extends ListFragment  {
 
 							// adding each child node to HashMap key => value
 							contact.put(TAG_GROUPID, groupId);
-							contact.put(TAG_GROUPNAME, groupName + " (Id: " + groupId + ")");
+						  //contact.put(TAG_GROUPNAME, groupName + " (Id: " + groupId + ")");
+                            contact.put(TAG_GROUPNAME, groupName);
 							contact.put(TAG_ADMIN, admin);
 							contact.put(TAG_USERFIRST, firstPlace);
 							contact.put(TAG_OWNPLACE, ownPlace);

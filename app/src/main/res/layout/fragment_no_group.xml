@@ -12,17 +12,17 @@
         android:id="@+id/button_nogroupact_createGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:text="@string/string_nogroupact_createGroup"
         android:layout_centerVertical="true"
-        android:text="@string/string_nogroupact_createGroup" />
+        android:layout_centerHorizontal="true" />
     
     <Button
         android:id="@+id/button_nogroupact_searchGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_nogroupact_advice"
-        android:layout_marginTop="83dp"
-        android:text="@string/string_nogroupact_searchGroup" />
+        android:text="@string/string_nogroupact_searchGroup"
+        android:layout_below="@+id/button_nogroupact_createGroup"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textview_nogroupact_advice"

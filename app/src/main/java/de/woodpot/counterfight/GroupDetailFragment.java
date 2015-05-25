@@ -75,6 +75,7 @@ public class GroupDetailFragment extends ListFragment   {
 	private static final String TAG_GROUPNAME = "groupName";
 	private static final String TAG_USERNAME = "userName";
 	private static final String TAG_GROUPID = "groupId";
+    private static final String TAG_TIMESTAMP = "timestamp";
     private static final String TAG_SET_COUNTER_TYPE = "counterType";
     private static final String TAG_COUNTER_TYPE_EDIT = "edit";
     private static final String TAG_COUNTER_TYPE_INCREASE = "increase";
@@ -86,12 +87,14 @@ public class GroupDetailFragment extends ListFragment   {
     private String username;
     private String counterValue;
     private String editCounterValue;
+    private String timeStamp;
 	
 	// JSONArray f�r Counterdaten
 	JSONArray counterData = null;
 	private Map<String, String> users = new HashMap<String,String>(); 
 	
 	ArrayList<HashMap<String, String>> contactList = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> timestampList = new ArrayList<HashMap<String, String>>();
 
 	// JSON parser class
 	JSONParser jsonParser = new JSONParser();
@@ -104,6 +107,7 @@ public class GroupDetailFragment extends ListFragment   {
 		setHasOptionsMenu(true);
 	
         contactList = new ArrayList<HashMap<String, String>>();
+        timestampList = new ArrayList<HashMap<String, String>>();
 	}
 
 	@Override
@@ -241,6 +245,7 @@ public class GroupDetailFragment extends ListFragment   {
 						
 						String userName = c.getString(TAG_USERNAME);
 						String countervalue = c.getString(TAG_COUNTERVALUE);
+                        String timestamp = c.getString(TAG_TIMESTAMP);
 						
 						// tmp hashmap for single contact
 						HashMap<String, String> contact = new HashMap<String, String>();
@@ -248,6 +253,8 @@ public class GroupDetailFragment extends ListFragment   {
 						// adding each child node to HashMap key => value
 						contact.put(TAG_USERNAME, userName);
 						contact.put(TAG_COUNTERVALUE, countervalue);
+                        contact.put(TAG_TIMESTAMP, timestamp);
+
 						//adding contact to contact list
 						contactList.add(contact);
 	
@@ -286,8 +293,8 @@ public class GroupDetailFragment extends ListFragment   {
 					Log.d("GroupDetailActivity JSON: ", "onPostExecute ausgef�hrt");
 					BaseAdapter adapter = new SimpleAdapter(
 							GroupDetailFragment.this.getActivity(), contactList,
-		                    R.layout.group_detail_list_item, new String[] { TAG_USERNAME, TAG_COUNTERVALUE }, 
-		                    new int[] { R.id.user_row_username, R.id.user_countervalue });
+		                    R.layout.group_detail_list_item, new String[] { TAG_USERNAME, TAG_COUNTERVALUE, TAG_TIMESTAMP },
+		                    new int[] { R.id.user_row_username, R.id.user_countervalue, R.id.group_details_user_timestamp });
 		 
 					setListAdapter(adapter);
 
